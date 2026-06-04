@@ -1,19 +1,24 @@
 package br.com.matheus.projetopoo;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
+import br.com.matheus.projetopoo.DAO.PrestadorDAO;
+import br.com.matheus.projetopoo.models.Prestador;
+
 import java.sql.SQLException;
-import java.sql.Statement;
 
 public class Main {
+    static void teste(){
+        PrestadorDAO p = new PrestadorDAO();
+        Prestador prestador = new Prestador();
+
+        prestador.setCnpj("12345678912346");
+        prestador.setAtivo(false);
+        prestador.setNomeFantasia("Outro PRESTADOR");
+        prestador.setRazaoSocial("dsadasd");
+
+        p.criar(prestador);
+    }
+
     static void main() throws SQLException {
-        Connection conexao = DataBase.getConnection();
-
-        Statement stmt = conexao.createStatement();
-        ResultSet result = stmt.executeQuery("select * from prestador");
-
-        result.first();
-
-        System.out.println(result.getString("razao_social"));
+        teste();
     }
 }
