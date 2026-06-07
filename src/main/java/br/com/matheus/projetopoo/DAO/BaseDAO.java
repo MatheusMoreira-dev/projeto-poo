@@ -10,11 +10,11 @@ import java.util.Optional;
 
 abstract class BaseDAO {
     private final String nomeTabela;
-    private final String colunaPK;
+    private final String nomeColunaPK;
 
-    BaseDAO(String nomeTabela, String colunaPK){
+    BaseDAO(String nomeTabela, String nomeColunaPK){
         this.nomeTabela = nomeTabela;
-        this.colunaPK = colunaPK;
+        this.nomeColunaPK = nomeColunaPK;
     }
 
     public Optional<ResultSet> getAll() {
@@ -35,7 +35,7 @@ abstract class BaseDAO {
     }
 
     public Optional<ResultSet> getById(int id){
-        String sql = "SELECT * FROM " + nomeTabela + "WHERE " + colunaPK + "=" + id;
+        String sql = "SELECT * FROM " + nomeTabela + " WHERE " + nomeColunaPK + " = " + id;
 
         try {
             Connection conn = ConnectionFactory.getConnection();
@@ -51,9 +51,22 @@ abstract class BaseDAO {
         return Optional.empty();
     };
 
-    abstract void delete();
+    public void delete(int id) {
+        String sql = "DELETE FROM " + nomeTabela + " WHERE " + nomeColunaPK + "= " + id;
+
+        try {
+            Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.executeUpdate();
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao deletar registro na tabela " + nomeTabela + "\n" + e);
+        }
+    };
 
     abstract void create();
 
     abstract void update();
+
+    abstract void mapperJson(ResultSet r);
 }

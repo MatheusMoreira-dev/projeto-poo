@@ -1,6 +1,5 @@
 package br.com.matheus.projetopoo.models;
 
-public class Setor {
-    private int id;
+public class Setor extends BaseModel{
     private String nome;
 }

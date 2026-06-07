@@ -1,4 +1,18 @@
 package br.com.matheus.projetopoo.DAO;
 
-public class SetorDAO {
+import java.sql.ResultSet;
+
+public class SetorDAO extends BaseDAO{
+    public SetorDAO() {
+        super("setor", "id");
+    }
+
+    @Override
+    void create() {}
+
+    @Override
+    void update() {}
+
+    @Override
+    void mapperJson(ResultSet r) {}
 }
