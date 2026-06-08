@@ -6,9 +6,11 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
-abstract class BaseDAO {
+public abstract class BaseDAO <ClassModel> {
     private final String nomeTabela;
     private final String nomeColunaPK;
 
@@ -17,15 +19,24 @@ abstract class BaseDAO {
         this.nomeColunaPK = nomeColunaPK;
     }
 
-    public Optional<ResultSet> getAll() {
+    public String getNomeTabela() {return nomeTabela;}
+
+    public String getNomeColunaPK() {return nomeColunaPK;}
+
+    public Optional<List<ClassModel>> getAll() {
         String sql = "SELECT * FROM " + nomeTabela;
+        List<ClassModel> list = new ArrayList<>();
 
         try {
             Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet result = stmt.executeQuery();
 
-            return Optional.of(result);
+            while(result.next()) {
+                list.add(deserializer(result));
+            }
+
+            return Optional.of(list);
 
         } catch (SQLException e){
             System.out.println("Erro ao carregar todos os registros da tabela " + nomeTabela + "\n" + e);
@@ -34,7 +45,7 @@ abstract class BaseDAO {
         return Optional.empty();
     }
 
-    public Optional<ResultSet> getById(int id){
+    public Optional<ClassModel> getById(int id){
         String sql = "SELECT * FROM " + nomeTabela + " WHERE " + nomeColunaPK + " = " + id;
 
         try {
@@ -42,7 +53,7 @@ abstract class BaseDAO {
             PreparedStatement stmt = conn.prepareStatement(sql);
             ResultSet result = stmt.executeQuery();
 
-            return  Optional.of(result);
+            return Optional.of(deserializer(result));
 
         } catch (SQLException e) {
             System.out.println("Erro ao buscar registro na tabela " + nomeTabela + "\n" + e);
@@ -64,9 +75,9 @@ abstract class BaseDAO {
         }
     };
 
-    abstract void create();
+    public abstract ClassModel create(ClassModel c);
 
-    abstract void update();
+    public abstract ClassModel update(ClassModel c);
 
-    abstract void mapperJson(ResultSet r);
+    abstract ClassModel deserializer (ResultSet r);
 }
