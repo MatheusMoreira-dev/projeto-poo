@@ -23,37 +23,43 @@ public abstract class BaseDAO <ClassModel> {
 
     public String getNomeColunaPK() {return nomeColunaPK;}
 
-    public Optional<List<ClassModel>> getAll() {
-        String sql = "SELECT * FROM " + nomeTabela;
+    public List<ClassModel> getAll() {
+        String sql = "SELECT * FROM ?";
         List<ClassModel> list = new ArrayList<>();
 
-        try {
-            Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet result = stmt.executeQuery();
+        try (
+                Connection conn = ConnectionFactory.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet result = stmt.executeQuery();
+                ){
+
+                stmt.setString(1, nomeTabela);
 
             while(result.next()) {
                 list.add(deserializer(result));
             }
 
-            return Optional.of(list);
-
         } catch (SQLException e){
             System.out.println("Erro ao carregar todos os registros da tabela " + nomeTabela + "\n" + e);
         }
 
-        return Optional.empty();
+        return list;
     }
 
     public Optional<ClassModel> getById(int id){
-        String sql = "SELECT * FROM " + nomeTabela + " WHERE " + nomeColunaPK + " = " + id;
+        String sql = "SELECT * FROM ? WHERE ? = ?";
 
-        try {
-            Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            ResultSet result = stmt.executeQuery();
+        try (
+                Connection conn = ConnectionFactory.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ResultSet result = stmt.executeQuery();
+                ){
 
-            return Optional.of(deserializer(result));
+            stmt.setString(1, nomeTabela);
+            stmt.setString(2, nomeColunaPK);
+            stmt.setInt(3, id);
+
+            if (result.next()) return Optional.of(deserializer(result));
 
         } catch (SQLException e) {
             System.out.println("Erro ao buscar registro na tabela " + nomeTabela + "\n" + e);
@@ -63,12 +69,18 @@ public abstract class BaseDAO <ClassModel> {
     };
 
     public void delete(int id) {
-        String sql = "DELETE FROM " + nomeTabela + " WHERE " + nomeColunaPK + "= " + id;
+        String sql = "DELETE FROM ? WHERE ? = ?";
 
-        try {
-            Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            stmt.executeUpdate();
+        try (
+                Connection conn = ConnectionFactory.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql);
+                ){
+
+                stmt.setString(1, nomeTabela);
+                stmt.setString(2, nomeColunaPK);
+                stmt.setInt(3, id);
+
+                stmt.executeUpdate();
 
         } catch (SQLException e) {
             System.out.println("Erro ao deletar registro na tabela " + nomeTabela + "\n" + e);

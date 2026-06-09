@@ -2,16 +2,14 @@ package br.com.matheus.projetopoo;
 
 import br.com.matheus.projetopoo.DAO.SetorDAO;
 import br.com.matheus.projetopoo.models.Setor;
+import br.com.matheus.projetopoo.views.terminal.SetorView;
 
 import java.sql.SQLException;
 
 public class Main {
     static void teste() {
-        Setor s = new Setor();
-        s.setNome("Matheus");
-
-        SetorDAO sd = new SetorDAO();
-        sd.create(s);
+        SetorView s = new SetorView();
+        s.main();
     }
 
     static void main() throws SQLException {
