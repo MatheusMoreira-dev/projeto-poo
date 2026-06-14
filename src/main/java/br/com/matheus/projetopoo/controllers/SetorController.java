@@ -3,13 +3,41 @@ package br.com.matheus.projetopoo.controllers;
 import br.com.matheus.projetopoo.DAO.SetorDAO;
 import br.com.matheus.projetopoo.models.Setor;
 
-public class SetorController {
-    private final SetorDAO setorDAO = new SetorDAO();
+import java.util.List;
+import java.util.Optional;
 
-    public Setor create(String nome){
-        Setor s = new Setor();
-        s.setNome(nome);
+public class SetorController{
+    private final SetorDAO dao = new SetorDAO();
 
-        return s;
+    public int create(String nome){
+        return dao.insert(List.of("nome"), List.of(nome));
+    }
+
+    public int delete(int id){
+        Optional<Setor> find = dao.getById(id);
+
+        if (find.isPresent()) {
+            return dao.delete(id);
+        }
+
+        return 0;
+    }
+
+    public int edit(int id, String nome){
+        Optional<Setor> find = dao.getById(id);
+
+        if (find.isPresent()){
+            return dao.update(id, List.of("nome"), List.of(nome));
+        }
+
+        return 0;
+    }
+
+    public List<Setor> getAll(){
+        return dao.getAll();
+    }
+
+    public Optional<Setor> get(int id){
+        return dao.getById(id);
     }
 }

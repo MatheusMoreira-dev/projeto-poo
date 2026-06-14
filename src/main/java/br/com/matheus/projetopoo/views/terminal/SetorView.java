@@ -1,10 +1,19 @@
 package br.com.matheus.projetopoo.views.terminal;
 
-public class SetorView implements BasicTerminalCRUD {
+import br.com.matheus.projetopoo.controllers.Controller;
+import br.com.matheus.projetopoo.controllers.SetorController;
+
+public class SetorView implements InterfaceTerminal {
+    private final SetorController controller;
+
+    public SetorView(){
+        controller = new SetorController();
+    };
+
     @Override
     public void create() {
         System.out.println("Nome: ");
-        input.next();
+        controller.create(input.next());
     }
 
     @Override

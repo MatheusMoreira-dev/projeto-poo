@@ -2,7 +2,7 @@ package br.com.matheus.projetopoo.views.terminal;
 
 import java.util.Scanner;
 
-public interface BasicTerminalCRUD {
+public interface InterfaceTerminal {
     Scanner input = new Scanner(System.in);
 
     void create();

@@ -10,11 +10,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public abstract class BaseDAO <ClassModel> {
+public abstract class DAO<ClassModel> {
     private final String nomeTabela;
     private final String nomeColunaPK;
 
-    BaseDAO(String nomeTabela, String nomeColunaPK){
+    DAO(String nomeTabela, String nomeColunaPK){
         this.nomeTabela = nomeTabela;
         this.nomeColunaPK = nomeColunaPK;
     }
