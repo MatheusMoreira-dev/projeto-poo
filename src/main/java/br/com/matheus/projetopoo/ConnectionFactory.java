@@ -5,7 +5,7 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public abstract class ConnectionFactory {
-    private static final String url = "jdbc:mariadb://localhost:3306/projeto_poo";
+    private static final String url = "jdbc:mariadb://localhost:3306/controle_estoque";
     private static final String user = "root";
     private static final String password = "";
 

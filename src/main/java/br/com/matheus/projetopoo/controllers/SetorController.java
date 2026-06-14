@@ -10,7 +10,6 @@ public class SetorController {
         Setor s = new Setor();
         s.setNome(nome);
 
-        setorDAO.create(s);
         return s;
     }
 }
