@@ -69,8 +69,9 @@ public abstract class DAO<ClassModel> {
         return Optional.empty();
     };
 
-    public int delete(int id) {
+    public boolean delete(int id) {
         String sql = "DELETE FROM %s WHERE %s = ?".formatted(nomeTabela, nomeColunaPK);
+        boolean successful = false;
 
         try (
                 Connection conn = ConnectionFactory.getConnection();
@@ -78,17 +79,16 @@ public abstract class DAO<ClassModel> {
                 ){
 
                 stmt.setInt(1, id);
-
-                return stmt.executeUpdate();
+                successful = stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
             System.out.println("Erro ao deletar registro na tabela " + nomeTabela + "\n" + e);
         }
 
-        return 0;
+        return successful;
     };
 
-    public int insert(List<String> nomeColunas, List<Object> valorColunas){
+    public boolean insert(List<String> nomeColunas, List<Object> valorColunas){
         List<String> qtdParametros = new ArrayList<>(nomeColunas.size());
 
         for (int i = 0; i < nomeColunas.size(); i++){
@@ -99,6 +99,7 @@ public abstract class DAO<ClassModel> {
         String strParams = String.join(",", qtdParametros);
 
         String sql = "INSERT INTO %s (%s) VALUES (%s)".formatted(nomeTabela, strCol, strParams);
+        boolean successful = false;
 
         try (
                 Connection conn = ConnectionFactory.getConnection();
@@ -108,16 +109,16 @@ public abstract class DAO<ClassModel> {
                 stmt.setObject(i + 1, valorColunas.get(i));
             }
 
-            return stmt.executeUpdate();
+            successful = stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
             System.out.println("Erro ao inserir registro na tabela " + nomeTabela + "\n" + e);
         }
 
-        return 0;
+            return successful;
     };
 
-    public int update(int id, List<String> nomeColunas, List<Object> valorColunas){
+    public boolean update(int id, List<String> nomeColunas, List<Object> valorColunas){
         List<String> params = new ArrayList<>(nomeColunas.size());
 
         for (int i = 0; i < nomeColunas.size(); i++){
@@ -126,6 +127,7 @@ public abstract class DAO<ClassModel> {
 
         String strParams = String.join(",", params);
         String sql = "UPDATE %s SET %s WHERE %s = ?".formatted(nomeTabela, strParams, nomeColunaPK);
+        boolean successful = false;
 
         try (
                 Connection conn = ConnectionFactory.getConnection();
@@ -136,14 +138,14 @@ public abstract class DAO<ClassModel> {
             }
 
             stmt.setInt(nomeColunas.size() + 1, id);
-            return stmt.executeUpdate();
+            successful = stmt.executeUpdate() > 0;
 
         } catch (SQLException e) {
             System.out.println("Erro ao editar registro na tabela " + nomeTabela + "\n" + e);
         }
 
-        return 0;
+        return successful;
     };
 
-    abstract ClassModel deserializer (ResultSet r);
+    protected abstract ClassModel deserializer (ResultSet r);
 }

@@ -1,12 +1,12 @@
 package br.com.matheus.projetopoo;
 
-import br.com.matheus.projetopoo.views.terminal.SetorView;
+import br.com.matheus.projetopoo.views.terminal.SetorViewTerminal;
 
 import java.sql.SQLException;
 
 public class Main {
     static void teste() {
-        SetorView view = new SetorView();
+        SetorViewTerminal view = new SetorViewTerminal();
         view.create();
     }
 

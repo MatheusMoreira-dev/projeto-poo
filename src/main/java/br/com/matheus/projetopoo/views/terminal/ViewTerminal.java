@@ -1,23 +1,25 @@
 package br.com.matheus.projetopoo.views.terminal;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.Scanner;
 
-public interface InterfaceTerminal {
+public interface ViewTerminal<ClassModel> {
     Scanner input = new Scanner(System.in);
 
-    void create();
+    ClassModel create();
 
-    void showItem();
+    Optional<ClassModel> getItem();
 
-    void showAll();
+    List<ClassModel> getAll();
 
-    void edit();
+    ClassModel edit();
 
-    void delete();
+    boolean delete();
 
     void exit();
 
-    default void main() {
+    default void mainMenu() {
         int opt = -1;
         String menu = """
                 1 - Criar
