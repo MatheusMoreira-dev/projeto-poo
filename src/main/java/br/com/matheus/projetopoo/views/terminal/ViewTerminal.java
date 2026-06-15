@@ -1,7 +1,6 @@
 package br.com.matheus.projetopoo.views.terminal;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Scanner;
 
 public interface ViewTerminal<ClassModel> {
@@ -9,17 +8,48 @@ public interface ViewTerminal<ClassModel> {
 
     ClassModel create();
 
-    Optional<ClassModel> getItem();
+    default void showItem(ClassModel c){
+        System.out.println(c);
+    };
 
-    List<ClassModel> getAll();
+    default void showAll(List<ClassModel> l) {
+        l.forEach(System.out::println);
+    };
+
+    default void execCompleted(String title){
+        System.out.println("Execução completa: " + title);
+    }
+
+    default void failedExec(String title) {
+        System.out.println("Falha na execução, tente novamente: " + title);
+    }
 
     ClassModel edit();
 
-    boolean delete();
+    default Integer delete() {
+        System.out.println("Digite o ID: ");
+        return input.nextInt();
+    };
 
-    void exit();
+    default boolean confirmDelete (ClassModel c){
+        System.out.println("Tem certeza que deseja excluir ?");
+        showItem(c);
 
-    default void mainMenu() {
+        System.out.println("0 - Confirmar   |   1 - Cancelar");
+        int opt = input.nextInt();
+
+        if (opt != 0 && opt != 1){
+            System.out.println("Digite uma opção válida !");
+            confirmDelete(c);
+        }
+
+        return opt == 0;
+    }
+
+    default void exit(){
+        System.out.println("Saindo...");
+    };
+    /*default void mainMenu() {
         int opt = -1;
         String menu = """
                 1 - Criar
@@ -47,5 +77,5 @@ public interface ViewTerminal<ClassModel> {
                     System.out.println("Digite uma opção válida !");
             }
         }
-    };
+    };*/
 }

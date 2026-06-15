@@ -58,9 +58,9 @@ public abstract class DAO<ClassModel> {
             stmt.setInt(1, id);
 
             ResultSet result = stmt.executeQuery();
-            result.close();
 
             if (result.next()) return Optional.of(deserializer(result));
+            result.close();
 
         } catch (SQLException e) {
             System.out.println("Erro ao buscar registro na tabela " + nomeTabela + "\n" + e);
@@ -68,6 +68,27 @@ public abstract class DAO<ClassModel> {
 
         return Optional.empty();
     };
+
+    public boolean confirmExistence(int id){
+        String sql = "SELECT 1 from %s WHERE %s = ?".formatted(nomeTabela, nomeColunaPK);
+
+        try (
+                Connection conn = ConnectionFactory.getConnection();
+                PreparedStatement stmt = conn.prepareStatement(sql);
+        ){
+
+            stmt.setInt(1, id);
+            ResultSet result = stmt.executeQuery();
+
+            if (result.next()) return true;
+            result.close();
+
+        } catch (SQLException e) {
+            System.out.println("Erro ao buscar registro na tabela " + nomeTabela + "\n" + e);
+        }
+
+        return false;
+    }
 
     public boolean delete(int id) {
         String sql = "DELETE FROM %s WHERE %s = ?".formatted(nomeTabela, nomeColunaPK);
@@ -88,7 +109,7 @@ public abstract class DAO<ClassModel> {
         return successful;
     };
 
-    public boolean insert(List<String> nomeColunas, List<Object> valorColunas){
+    protected Optional<Integer> insert(List<String> nomeColunas, List<Object> valorColunas){
         List<String> qtdParametros = new ArrayList<>(nomeColunas.size());
 
         for (int i = 0; i < nomeColunas.size(); i++){
@@ -99,26 +120,34 @@ public abstract class DAO<ClassModel> {
         String strParams = String.join(",", qtdParametros);
 
         String sql = "INSERT INTO %s (%s) VALUES (%s)".formatted(nomeTabela, strCol, strParams);
-        boolean successful = false;
 
         try (
                 Connection conn = ConnectionFactory.getConnection();
-                PreparedStatement stmt = conn.prepareStatement(sql);
+                PreparedStatement stmt = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS);
         ){
             for (int i = 0; i < nomeColunas.size(); i++){
                 stmt.setObject(i + 1, valorColunas.get(i));
             }
 
-            successful = stmt.executeUpdate() > 0;
+            stmt.executeUpdate();
+            ResultSet key = stmt.getGeneratedKeys();
+
+            if (key.next()){
+                return Optional.of(key.getInt(1));
+            }
+
+            key.close();
 
         } catch (SQLException e) {
             System.out.println("Erro ao inserir registro na tabela " + nomeTabela + "\n" + e);
         }
 
-            return successful;
+        return Optional.empty();
     };
 
-    public boolean update(int id, List<String> nomeColunas, List<Object> valorColunas){
+    public abstract Optional<Integer> insert(ClassModel c);
+
+    protected boolean update(int id, List<String> nomeColunas, List<Object> valorColunas){
         List<String> params = new ArrayList<>(nomeColunas.size());
 
         for (int i = 0; i < nomeColunas.size(); i++){
@@ -146,6 +175,8 @@ public abstract class DAO<ClassModel> {
 
         return successful;
     };
+
+    public abstract boolean update(ClassModel c);
 
     protected abstract ClassModel deserializer (ResultSet r);
 }
