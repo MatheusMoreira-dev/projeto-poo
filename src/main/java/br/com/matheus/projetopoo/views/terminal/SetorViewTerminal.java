@@ -7,7 +7,7 @@ public class SetorViewTerminal implements ViewTerminal<Setor> {
     public Setor create() {
         Setor s = new Setor();
         System.out.print("Nome: ");
-        s.setNome(input.next());
+        s.setNome(input.nextLine());
         return s;
     }
 
@@ -15,13 +15,7 @@ public class SetorViewTerminal implements ViewTerminal<Setor> {
     public Setor edit() {
         Setor s = new Setor();
         System.out.print("Novo Nome: ");
-        s.setNome(input.next());
+        s.setNome(input.nextLine());
         return s;
-    }
-
-    @Override
-    public Integer delete() {
-        System.out.println("Digite o ID: ");
-        return input.nextInt();
     }
 }
