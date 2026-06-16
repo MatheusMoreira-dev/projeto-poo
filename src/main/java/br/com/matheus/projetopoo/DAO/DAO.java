@@ -1,7 +1,5 @@
 package br.com.matheus.projetopoo.DAO;
 
-import br.com.matheus.projetopoo.ConnectionFactory;
-
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;

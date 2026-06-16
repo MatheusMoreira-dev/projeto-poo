@@ -8,12 +8,20 @@ public interface ViewTerminal<ClassModel> {
 
     ClassModel create();
 
+    default boolean finish(){
+        System.out.println("0 - Ver Menu | 1 - Finalizar ");
+        return input.nextInt() == 0;
+    }
+
     default void showItem(ClassModel c){
-        System.out.println(c);
+        System.out.println("\n" + c + "\n");
     };
 
     default void showAll(List<ClassModel> l) {
+        System.out.println("\nTotal: " + l.size());
+        System.out.println("----------------------------");
         l.forEach(System.out::println);
+        System.out.println("\n");
     };
 
     default void execCompleted(String title){
@@ -26,21 +34,20 @@ public interface ViewTerminal<ClassModel> {
 
     ClassModel edit();
 
-    default Integer delete() {
+    default Integer requestId() {
         System.out.println("Digite o ID: ");
         return input.nextInt();
     };
 
-    default boolean confirmDelete (ClassModel c){
+    default boolean delete(ClassModel c){
         System.out.println("Tem certeza que deseja excluir ?");
         showItem(c);
-
         System.out.println("0 - Confirmar   |   1 - Cancelar");
         int opt = input.nextInt();
 
         if (opt != 0 && opt != 1){
             System.out.println("Digite uma opção válida !");
-            confirmDelete(c);
+            delete(c);
         }
 
         return opt == 0;
@@ -49,33 +56,4 @@ public interface ViewTerminal<ClassModel> {
     default void exit(){
         System.out.println("Saindo...");
     };
-    /*default void mainMenu() {
-        int opt = -1;
-        String menu = """
-                1 - Criar
-                2 - Mostrar Item
-                3 - Motrar todos os registros
-                4 - Editar
-                5 - Deletar
-                
-                0 - Sair
-                """;
-
-        while (opt != 0) {
-            System.out.println(menu);
-            opt = input.nextInt();
-
-            switch (opt) {
-                case 1: create(); break;
-                case 2: showItem(); break;
-                case 3: showAll(); break;
-                case 4: edit(); break;
-                case 5: delete(); break;
-                case 0: exit(); break;
-
-                default:
-                    System.out.println("Digite uma opção válida !");
-            }
-        }
-    };*/
 }

@@ -7,10 +7,10 @@ import java.sql.SQLException;
 public class Main {
     static void teste() {
         SetorController c = new SetorController();
-        c.create();
+        c.startMenu();
     }
 
-    public static void main(String[] args) throws SQLException {
+    static void main(String[] args) throws SQLException {
         teste();
     }
 }
