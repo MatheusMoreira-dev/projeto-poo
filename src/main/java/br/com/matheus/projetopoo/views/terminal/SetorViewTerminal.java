@@ -13,6 +13,10 @@ public class SetorViewTerminal implements ViewTerminal<Setor> {
 
     @Override
     public Setor edit() {
-        return create();
+        Integer id = this.requestId();
+        Setor s = this.create();
+
+        s.setId(id);
+        return s;
     }
 }

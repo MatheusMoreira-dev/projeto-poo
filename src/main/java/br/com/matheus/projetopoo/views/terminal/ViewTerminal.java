@@ -36,7 +36,10 @@ public interface ViewTerminal<ClassModel> {
 
     default Integer requestId() {
         System.out.println("Digite o ID: ");
-        return input.nextInt();
+        Integer id = input.nextInt();
+        input.nextLine();
+
+        return id;
     };
 
     default boolean confirmExec(String title, String description){

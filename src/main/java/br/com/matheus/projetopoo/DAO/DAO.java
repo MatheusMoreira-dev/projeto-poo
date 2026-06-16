@@ -21,7 +21,7 @@ public abstract class DAO<ClassModel> {
 
     public String getNomeColunaPK() {return nomeColunaPK;}
 
-    public List<ClassModel> getAll() {
+    public List<ClassModel> getAll() throws SQLException {
         String sql = "SELECT * FROM %s".formatted(nomeTabela);
         List<ClassModel> list = new ArrayList<>();
 
@@ -38,14 +38,12 @@ public abstract class DAO<ClassModel> {
 
             result.close();
 
-        } catch (SQLException e){
-            System.out.println("Erro ao carregar todos os registros da tabela " + nomeTabela + "\n" + e);
         }
 
         return list;
     }
 
-    public Optional<ClassModel> getById(int id){
+    public Optional<ClassModel> getById(int id) throws SQLException{
         String sql = "SELECT * FROM %s WHERE %s = ?".formatted(nomeTabela, nomeColunaPK);
 
         try (
@@ -59,15 +57,12 @@ public abstract class DAO<ClassModel> {
 
             if (result.next()) return Optional.of(deserializer(result));
             result.close();
-
-        } catch (SQLException e) {
-            System.out.println("Erro ao buscar registro na tabela " + nomeTabela + "\n" + e);
         }
 
         return Optional.empty();
     };
 
-    public boolean confirmExistence(int id){
+    public boolean confirmExistence(int id) throws SQLException{
         String sql = "SELECT 1 from %s WHERE %s = ?".formatted(nomeTabela, nomeColunaPK);
 
         try (
@@ -81,14 +76,12 @@ public abstract class DAO<ClassModel> {
             if (result.next()) return true;
             result.close();
 
-        } catch (SQLException e) {
-            System.out.println("Erro ao buscar registro na tabela " + nomeTabela + "\n" + e);
         }
 
         return false;
     }
 
-    public boolean delete(int id) {
+    public boolean delete(int id) throws SQLException {
         String sql = "DELETE FROM %s WHERE %s = ?".formatted(nomeTabela, nomeColunaPK);
         boolean successful = false;
 
@@ -100,14 +93,12 @@ public abstract class DAO<ClassModel> {
                 stmt.setInt(1, id);
                 successful = stmt.executeUpdate() > 0;
 
-        } catch (SQLException e) {
-            System.out.println("Erro ao deletar registro na tabela " + nomeTabela + "\n" + e);
         }
 
         return successful;
     };
 
-    protected Optional<Integer> insert(List<String> nomeColunas, List<Object> valorColunas){
+    protected Integer insert(List<String> nomeColunas, List<Object> valorColunas) throws SQLException{
         List<String> qtdParametros = new ArrayList<>(nomeColunas.size());
 
         for (int i = 0; i < nomeColunas.size(); i++){
@@ -131,21 +122,18 @@ public abstract class DAO<ClassModel> {
             ResultSet key = stmt.getGeneratedKeys();
 
             if (key.next()){
-                return Optional.of(key.getInt(1));
+                return key.getInt(1);
             }
 
             key.close();
-
-        } catch (SQLException e) {
-            System.out.println("Erro ao inserir registro na tabela " + nomeTabela + "\n" + e);
         }
 
-        return Optional.empty();
+        return null;
     };
 
-    public abstract Optional<Integer> insert(ClassModel c);
+    public abstract Integer insert(ClassModel c) throws SQLException;
 
-    protected boolean update(int id, List<String> nomeColunas, List<Object> valorColunas){
+    protected boolean update(int id, List<String> nomeColunas, List<Object> valorColunas) throws SQLException{
         List<String> params = new ArrayList<>(nomeColunas.size());
 
         for (int i = 0; i < nomeColunas.size(); i++){
@@ -167,14 +155,12 @@ public abstract class DAO<ClassModel> {
             stmt.setInt(nomeColunas.size() + 1, id);
             successful = stmt.executeUpdate() > 0;
 
-        } catch (SQLException e) {
-            System.out.println("Erro ao editar registro na tabela " + nomeTabela + "\n" + e);
         }
 
         return successful;
     };
 
-    public abstract boolean update(ClassModel c);
+    public abstract boolean update(ClassModel c) throws SQLException;
 
     protected abstract ClassModel deserializer (ResultSet r);
 }

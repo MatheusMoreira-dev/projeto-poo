@@ -6,6 +6,7 @@ import br.com.matheus.projetopoo.models.Funcionario;
 import br.com.matheus.projetopoo.models.Setor;
 import br.com.matheus.projetopoo.views.terminal.FuncionarioViewTerminal;
 
+import java.sql.SQLException;
 import java.util.Optional;
 
 public class FuncionarioController implements TerminalController{
@@ -16,23 +17,21 @@ public class FuncionarioController implements TerminalController{
     @Override
     public void create() {
         Funcionario f = view.create();
-        Optional<Setor> setor = daoSetor.getById(f.getSetorId());
 
-        if (setor.isPresent()) {
-            boolean confirm = view.confirmExec("Deseja cadastrar o funcionário no Setor:", setor.get().toString());
+        try {
+            Optional<Setor> setor = daoSetor.getById(f.getSetorId());
 
-            if (confirm) {
-                Optional<Integer> id = dao.insert(f);
-
-                if (id.isPresent()) {
-                    view.execCompleted("Funcionário criado com sucesso!");
-                } else {
-                    view.failedExec("Não foi possível cadastrar o Funcionário!");
-                }
+            if (setor.isEmpty()) {
+                view.failedExec("Não existe nenhum setor com esse id!");
+                return;
             }
 
-        } else {
-            view.failedExec("Setor não encontrado !");
+            dao.insert(f);
+            view.execCompleted("Funcionário cadastrado com sucesso!");
+
+
+        } catch (SQLException e) {
+            view.failedExec("Não foi possível realizar operação!");
         }
     }
 

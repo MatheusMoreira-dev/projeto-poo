@@ -1,5 +1,6 @@
 package br.com.matheus.projetopoo.controllers;
 
+import java.sql.SQLException;
 import java.util.Scanner;
 
 public interface TerminalController {
@@ -13,7 +14,7 @@ public interface TerminalController {
 
     void get();
 
-    void getAll();
+    void getAll() throws SQLException;
 
     void exit();
 

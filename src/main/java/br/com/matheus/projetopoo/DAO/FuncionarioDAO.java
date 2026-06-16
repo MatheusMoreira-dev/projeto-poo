@@ -14,7 +14,7 @@ public class FuncionarioDAO extends DAO<Funcionario> {
     }
 
     @Override
-    public Optional<Integer> insert(Funcionario c) {
+    public Integer insert(Funcionario c) throws SQLException {
         List<String> colunas = List.of("nome", "setor_id");
         List<Object> valores = List.of(c.getNome(), c.getSetorId());
 
@@ -22,7 +22,7 @@ public class FuncionarioDAO extends DAO<Funcionario> {
     }
 
     @Override
-    public boolean update(Funcionario c) {
+    public boolean update(Funcionario c) throws SQLException {
         List<String> colunas = List.of("nome", "setor_id");
         List<Object> valores = List.of(c.getNome(), c.getSetorId());
 

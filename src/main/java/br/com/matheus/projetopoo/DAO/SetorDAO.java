@@ -13,7 +13,7 @@ public class SetorDAO extends DAO<Setor> {
     }
 
     @Override
-    public Optional<Integer> insert(Setor c) {
+    public Integer insert(Setor c) throws SQLException {
         List<String> colunas = List.of("nome");
         List<Object> valores = List.of(c.getNome());
 
@@ -21,7 +21,7 @@ public class SetorDAO extends DAO<Setor> {
     }
 
     @Override
-    public boolean update(Setor c) {
+    public boolean update(Setor c) throws SQLException {
         List<String> colunas = List.of("nome");
         List<Object> valores = List.of(c.getNome());
 

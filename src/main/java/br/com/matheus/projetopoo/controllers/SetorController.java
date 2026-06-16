@@ -4,6 +4,7 @@ import br.com.matheus.projetopoo.DAO.SetorDAO;
 import br.com.matheus.projetopoo.models.Setor;
 import br.com.matheus.projetopoo.views.terminal.SetorViewTerminal;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,61 +14,85 @@ public class SetorController implements TerminalController {
 
     public void create(){
         Setor s = view.create();
-        Optional<Integer> id = dao.insert(s);
 
-        if (id.isPresent()){
+        try {
+            Integer id = dao.insert(s);
             view.execCompleted("Setor criado com sucesso");
 
-        } else {
+        } catch (SQLException e){
             view.failedExec("Falha em criar setor!");
         }
     }
 
     public void delete(){
         Integer id = view.requestId();
-        Optional<Setor> s = dao.getById(id);
 
-        if (s.isPresent()) {
-            boolean confirmed = view.delete(s.get());
+        try {
+            Optional<Setor> s = dao.getById(id);
 
-            if (confirmed) {
-               boolean deleted = dao.delete(s.get().getId());
-
-               if (deleted) {
-                   view.execCompleted("Setor deletado com sucesso !");
-               } else{
-                   view.failedExec("Falha ao deletar setor !");
-               }
+            if (s.isEmpty()){
+                view.failedExec("Não há nenhum setor com esse id.");
+                return;
             }
-        } else {
-            view.failedExec("Não foi possível localizar setor!");
+
+            boolean deleted = dao.delete(s.get().getId());
+
+            if (!deleted){
+                view.execCompleted("Operação cancelada!");
+                return;
+            }
+
+            view.execCompleted("Operação bem sucedida!");
+
+        } catch (SQLException e) {
+            view.failedExec("Não foi possível localizar o setor!");
         }
     }
 
     public void edit(){
         Setor s = view.edit();
-        boolean edited = dao.update(s);
 
-        if (edited) {
+        try {
+            boolean exists = dao.confirmExistence(s.getId());
+
+            if (!exists) {
+                view.failedExec("Não existe nenhum setor com esse Id");
+                return;
+            }
+
+            dao.update(s);
             view.execCompleted("Setor editado com sucesso!");
-        } else {
+
+        } catch (SQLException e){
             view.failedExec("Não foi possível editar o setor!");
         }
     }
 
-    public void getAll(){
-        List<Setor> list = dao.getAll();
-        view.showAll(list);
+    public void getAll() {
+        try {
+            List<Setor> list = dao.getAll();
+            view.showAll(list);
+
+        } catch (SQLException e) {
+            view.failedExec("Erro ao carregar todos os setores cadastrados!");
+        }
     }
 
     public void get(){
         Integer id = view.requestId();
-        Optional<Setor> s = dao.getById(id);
 
-        if (s.isPresent()) {
+        try {
+            Optional<Setor> s = dao.getById(id);
+
+            if (s.isEmpty()) {
+                view.failedExec("Não há nenhum setor com esse Id");
+                return;
+            }
+
             view.showItem(s.get());
-        } else{
-            view.failedExec("Não há nenhum setor com esse ID.");
+
+        } catch (SQLException e) {
+            view.failedExec("Não foi possível realizar operação de busca!");
         }
     }
 
