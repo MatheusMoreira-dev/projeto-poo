@@ -29,7 +29,7 @@ public interface ViewTerminal<ClassModel> {
     }
 
     default void failedExec(String title) {
-        System.out.println("Falha na execução, tente novamente: " + title);
+        System.err.println("Falha na execução, tente novamente: " + title);
     }
 
     ClassModel edit();
@@ -39,18 +39,23 @@ public interface ViewTerminal<ClassModel> {
         return input.nextInt();
     };
 
-    default boolean delete(ClassModel c){
-        System.out.println("Tem certeza que deseja excluir ?");
-        showItem(c);
+    default boolean confirmExec(String title, String description){
+        System.out.println("\n" + title);
+        System.out.println("\n" +  description + "\n");
         System.out.println("0 - Confirmar   |   1 - Cancelar");
+        System.out.print("> ");
         int opt = input.nextInt();
 
         if (opt != 0 && opt != 1){
             System.out.println("Digite uma opção válida !");
-            delete(c);
+            confirmExec(title, description);
         }
 
         return opt == 0;
+    }
+
+    default boolean delete(ClassModel c){
+        return confirmExec("Tem certeza que deseja excluir ?", c.toString());
     }
 
     default void exit(){

@@ -19,4 +19,12 @@ public class Funcionario extends Model {
     public void setNome(String nome) {
         this.nome = nome;
     }
+
+    @Override
+    public String toString() {
+        return "Funcionario{" +
+                "nome='" + nome + '\'' +
+                ", setorId=" + setorId +
+                '}';
+    }
 }

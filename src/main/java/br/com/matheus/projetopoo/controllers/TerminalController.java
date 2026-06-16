@@ -14,4 +14,8 @@ public interface TerminalController {
     void get();
 
     void getAll();
+
+    void exit();
+
+    void startMenu();
 }

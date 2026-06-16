@@ -13,9 +13,6 @@ public class SetorViewTerminal implements ViewTerminal<Setor> {
 
     @Override
     public Setor edit() {
-        Setor s = new Setor();
-        System.out.print("Novo Nome: ");
-        s.setNome(input.nextLine());
-        return s;
+        return create();
     }
 }

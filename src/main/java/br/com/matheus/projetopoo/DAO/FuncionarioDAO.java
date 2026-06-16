@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public class FuncionarioDAO extends DAO<Funcionario> {
 
-    FuncionarioDAO() {
+    public FuncionarioDAO() {
         super("funcionario", "id");
     }
 
