@@ -1,10 +1,64 @@
 package br.com.matheus.projetopoo.models;
 
+import java.time.LocalDate;
+
 public class Registro {
-    private int id;
-    private String data;
+    private LocalDate data;
     private int itemId;
-    private int usuarioId;
+    private int funcionarioId;
     private int depositoId;
-    private int qtd;
+    private int quantidade;
+    private String descricao;
+
+    public LocalDate getData() {
+        return data;
+    }
+
+    public void setData(LocalDate data) {
+        this.data = data;
+    }
+
+    public void setData(String dataString){
+        this.data = LocalDate.parse(dataString);
+    }
+
+    public int getItemId() {
+        return itemId;
+    }
+
+    public void setItemId(int itemId) {
+        this.itemId = itemId;
+    }
+
+    public int getFuncionarioId() {
+        return funcionarioId;
+    }
+
+    public void setFuncionarioId(int funcionarioId) {
+        this.funcionarioId = funcionarioId;
+    }
+
+    public int getDepositoId() {
+        return depositoId;
+    }
+
+    public void setDepositoId(int depositoId) {
+        this.depositoId = depositoId;
+    }
+
+    public int getQuantidade() {
+        return quantidade;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public String getDescricao() {
+        return descricao;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
 }

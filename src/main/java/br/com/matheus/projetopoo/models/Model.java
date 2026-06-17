@@ -1,6 +1,6 @@
 package br.com.matheus.projetopoo.models;
 
-public class Model {
+public abstract class Model {
     private int id;
 
     public void setId(int id){
