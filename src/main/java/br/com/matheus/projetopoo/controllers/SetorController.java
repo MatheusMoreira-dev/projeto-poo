@@ -2,6 +2,7 @@ package br.com.matheus.projetopoo.controllers;
 
 import br.com.matheus.projetopoo.DAO.SetorDAO;
 import br.com.matheus.projetopoo.models.Setor;
+import br.com.matheus.projetopoo.utils.TerminalUtils;
 import br.com.matheus.projetopoo.views.terminal.SetorViewTerminal;
 
 import java.sql.SQLException;
@@ -17,10 +18,10 @@ public class SetorController implements TerminalController {
 
         try {
             Integer id = dao.insert(s);
-            view.execCompleted("Setor criado com sucesso");
+            view.successMsg("Setor criado com sucesso");
 
         } catch (SQLException e){
-            view.failedExec("Falha em criar setor!");
+            view.errorMsg("Falha em criar setor!");
         }
     }
 
@@ -31,21 +32,21 @@ public class SetorController implements TerminalController {
             Optional<Setor> s = dao.getById(id);
 
             if (s.isEmpty()){
-                view.failedExec("Não há nenhum setor com esse id.");
+                view.errorMsg("Não há nenhum setor com esse id.");
                 return;
             }
 
             boolean deleted = dao.delete(s.get().getId());
 
             if (!deleted){
-                view.execCompleted("Operação cancelada!");
+                view.successMsg("Operação cancelada!");
                 return;
             }
 
-            view.execCompleted("Operação bem sucedida!");
+            view.successMsg("Operação bem sucedida!");
 
         } catch (SQLException e) {
-            view.failedExec("Não foi possível localizar o setor!");
+            view.errorMsg("Não foi possível localizar o setor!");
         }
     }
 
@@ -56,15 +57,15 @@ public class SetorController implements TerminalController {
             boolean exists = dao.confirmExistence(s.getId());
 
             if (!exists) {
-                view.failedExec("Não existe nenhum setor com esse Id");
+                view.errorMsg("Não existe nenhum setor com esse Id");
                 return;
             }
 
             dao.update(s);
-            view.execCompleted("Setor editado com sucesso!");
+            view.successMsg("Setor editado com sucesso!");
 
         } catch (SQLException e){
-            view.failedExec("Não foi possível editar o setor!");
+            view.errorMsg("Não foi possível editar o setor!");
         }
     }
 
@@ -74,7 +75,7 @@ public class SetorController implements TerminalController {
             view.showAll(list);
 
         } catch (SQLException e) {
-            view.failedExec("Erro ao carregar todos os setores cadastrados!");
+            view.errorMsg("Erro ao carregar todos os setores cadastrados!");
         }
     }
 
@@ -85,14 +86,14 @@ public class SetorController implements TerminalController {
             Optional<Setor> s = dao.getById(id);
 
             if (s.isEmpty()) {
-                view.failedExec("Não há nenhum setor com esse Id");
+                view.errorMsg("Não há nenhum setor com esse Id");
                 return;
             }
 
             view.showItem(s.get());
 
         } catch (SQLException e) {
-            view.failedExec("Não foi possível realizar operação de busca!");
+            view.errorMsg("Não foi possível realizar operação de busca!");
         }
     }
 
@@ -121,6 +122,8 @@ public class SetorController implements TerminalController {
         while (opt != 0) {
             System.out.print(menu);
             opt = input.nextInt();
+
+            TerminalUtils.clearConsole();
 
             switch (opt) {
                 case 1: create(); break;

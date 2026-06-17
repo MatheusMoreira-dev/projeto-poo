@@ -10,16 +10,26 @@ public class FuncionarioViewTerminal implements ViewTerminal<Funcionario>{
         System.out.println("Cadastro de Funcionário");
         System.out.println("--------------------------------------------");
         System.out.print("Nome do funcionário: ");
-        f.setNome(input.nextLine());
+
+        String nome = input.nextLine();
+        f.setNome(nome);
 
         System.out.print("Id do Setor: ");
-        f.setSetorId(input.nextInt());
+        int id = input.nextInt();
+
+        input.nextLine();
+        f.setSetorId(id);
+
         System.out.println("--------------------------------------------");
         return f;
     }
 
     @Override
     public Funcionario edit() {
-        return create();
+        Funcionario f = create();
+        Integer id = this.requestId();
+
+        f.setId(id);
+        return f;
     }
 }

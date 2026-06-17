@@ -5,7 +5,6 @@ import br.com.matheus.projetopoo.models.Setor;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 public class SetorDAO extends DAO<Setor> {
     public SetorDAO() {

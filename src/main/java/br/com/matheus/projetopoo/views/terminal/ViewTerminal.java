@@ -24,12 +24,22 @@ public interface ViewTerminal<ClassModel> {
         System.out.println("\n");
     };
 
-    default void execCompleted(String title){
-        System.out.println("Execução completa: " + title);
+    default void successMsg(String title){
+        System.out.println("Sucesso: " + title);
     }
 
-    default void failedExec(String title) {
-        System.err.println("Falha na execução, tente novamente: " + title);
+    default void successMsg(String title, String description){
+        System.out.println("Sucesso: " + title);
+        System.out.println("\n" + description);
+    }
+
+    default void errorMsg(String title) {
+        System.err.println("Erro: " + title);
+    }
+
+    default void errorMsg(String title, String description){
+        System.err.println("Erro: " + title);
+        System.err.println("\n" + description);
     }
 
     ClassModel edit();
