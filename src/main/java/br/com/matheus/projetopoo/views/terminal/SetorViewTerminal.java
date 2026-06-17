@@ -2,7 +2,7 @@ package br.com.matheus.projetopoo.views.terminal;
 
 import br.com.matheus.projetopoo.models.Setor;
 
-public class SetorViewTerminal implements ViewTerminal<Setor> {
+public class SetorViewTerminal implements ViewTerminalCRUD<Setor> {
     @Override
     public Setor create() {
         Setor s = new Setor();

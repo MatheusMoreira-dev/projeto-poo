@@ -2,7 +2,6 @@ package br.com.matheus.projetopoo.controllers;
 
 import br.com.matheus.projetopoo.DAO.SetorDAO;
 import br.com.matheus.projetopoo.models.Setor;
-import br.com.matheus.projetopoo.utils.TerminalUtils;
 import br.com.matheus.projetopoo.views.terminal.SetorViewTerminal;
 
 import java.sql.SQLException;
@@ -100,42 +99,5 @@ public class SetorController implements TerminalController {
     public void exit(){
         view.exit();
         input.close();
-    }
-
-    public void startMenu() {
-        int opt = -1;
-        String menu = """
-                Setor
-                ----------------------------------------------
-                1 - Criar
-                2 - Mostrar Item
-                3 - Motrar todos os registros
-                4 - Editar
-                5 - Deletar
-                
-                0 - Sair
-                -------------------------------------------
-                
-                Opção:
-                """;
-
-        while (opt != 0) {
-            System.out.print(menu);
-            opt = input.nextInt();
-
-            TerminalUtils.clearConsole();
-
-            switch (opt) {
-                case 1: create(); break;
-                case 2: get(); break;
-                case 3: getAll(); break;
-                case 4: edit(); break;
-                case 5: delete(); break;
-                case 0: exit(); break;
-
-                default:
-                    System.out.println("\nDigite uma opção válida !\n");
-            }
-        }
     }
 }

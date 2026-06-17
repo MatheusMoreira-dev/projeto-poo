@@ -3,7 +3,7 @@ package br.com.matheus.projetopoo.views.terminal;
 import java.util.List;
 import java.util.Scanner;
 
-public interface ViewTerminal<ClassModel> {
+public interface ViewTerminalCRUD<ClassModel> {
     Scanner input = new Scanner(System.in);
 
     ClassModel create();
