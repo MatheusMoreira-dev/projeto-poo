@@ -26,8 +26,8 @@ public class FuncionarioViewTerminal implements ViewTerminalCRUD<Funcionario> {
 
     @Override
     public Funcionario edit() {
-        Funcionario f = create();
         Integer id = this.requestId();
+        Funcionario f = create();
 
         f.setId(id);
         return f;
