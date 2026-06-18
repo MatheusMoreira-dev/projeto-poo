@@ -1,26 +1,27 @@
 package br.com.matheus.projetopoo.controllers;
 
-import br.com.matheus.projetopoo.DAO.SetorDAO;
+import br.com.matheus.projetopoo.DAO.DepositoDAO;
+import br.com.matheus.projetopoo.models.Deposito;
 import br.com.matheus.projetopoo.models.Setor;
-import br.com.matheus.projetopoo.views.terminal.SetorViewTerminal;
+import br.com.matheus.projetopoo.views.terminal.DepositoViewTerminal;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-public class SetorController implements TerminalController {
-    private final SetorDAO dao = new SetorDAO();
-    private final SetorViewTerminal view = new SetorViewTerminal();
+public class DepositoController implements TerminalController{
+    private final DepositoDAO dao = new DepositoDAO();
+    private final DepositoViewTerminal view = new DepositoViewTerminal();
 
     public void create(){
-        Setor s = view.create();
+        Deposito s = view.create();
 
         try {
             Integer id = dao.insert(s);
-            view.successMsg("Setor criado com sucesso");
+            view.successMsg("Depósito criado com sucesso");
 
         } catch (SQLException e){
-            view.errorMsg("Falha em criar setor!");
+            view.errorMsg("Falha em criar depósito!");
         }
     }
 
@@ -28,10 +29,10 @@ public class SetorController implements TerminalController {
         Integer id = view.requestId();
 
         try {
-            Optional<Setor> s = dao.getById(id);
+            Optional<Deposito> s = dao.getById(id);
 
             if (s.isEmpty()){
-                view.errorMsg("Não há nenhum setor com esse id.");
+                view.errorMsg("Não há nenhum depósito com esse id.");
                 return;
             }
 
@@ -45,36 +46,36 @@ public class SetorController implements TerminalController {
             view.successMsg("Operação bem sucedida!");
 
         } catch (SQLException e) {
-            view.errorMsg("Não foi possível localizar o setor!");
+            view.errorMsg("Não foi possível localizar o depósito!");
         }
     }
 
     public void edit(){
-        Setor s = view.edit();
+        Deposito s = view.edit();
 
         try {
             boolean exists = dao.confirmExistence(s.getId());
 
             if (!exists) {
-                view.errorMsg("Não existe nenhum setor com esse Id");
+                view.errorMsg("Não existe nenhum depósito com esse Id");
                 return;
             }
 
             dao.update(s);
-            view.successMsg("Setor editado com sucesso!");
+            view.successMsg("Depósito editado com sucesso!");
 
         } catch (SQLException e){
-            view.errorMsg("Não foi possível editar o setor!");
+            view.errorMsg("Não foi possível editar o depósito!");
         }
     }
 
     public void getAll() {
         try {
-            List<Setor> list = dao.getAll();
+            List<Deposito> list = dao.getAll();
             view.showAll(list);
 
         } catch (SQLException e) {
-            view.errorMsg("Erro ao carregar todos os setores cadastrados!");
+            view.errorMsg("Erro ao carregar todos os depósitos cadastrados!");
         }
     }
 
@@ -82,10 +83,10 @@ public class SetorController implements TerminalController {
         Integer id = view.requestId();
 
         try {
-            Optional<Setor> s = dao.getById(id);
+            Optional<Deposito> s = dao.getById(id);
 
             if (s.isEmpty()) {
-                view.errorMsg("Não há nenhum setor com esse Id");
+                view.errorMsg("Não há nenhum deposito com esse Id");
                 return;
             }
 

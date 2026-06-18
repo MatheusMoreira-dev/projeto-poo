@@ -37,4 +37,14 @@ public class Item extends Model {
     public void setFuncionarioId(int funcionarioId) {
         this.funcionarioId = funcionarioId;
     }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "nome='" + nome + '\'' +
+                ", descricao='" + descricao + '\'' +
+                ", categoria=" + categoria +
+                ", funcionarioId=" + funcionarioId +
+                '}';
+    }
 }

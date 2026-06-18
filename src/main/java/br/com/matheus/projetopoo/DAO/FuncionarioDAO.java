@@ -5,7 +5,6 @@ import br.com.matheus.projetopoo.models.Funcionario;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Optional;
 
 public class FuncionarioDAO extends DAO<Funcionario> {
 
@@ -35,6 +34,7 @@ public class FuncionarioDAO extends DAO<Funcionario> {
             Funcionario model = new Funcionario();
             model.setNome(r.getString("nome"));
             model.setId(r.getInt("id"));
+            model.setSetorId(r.getInt("setor_id"));
 
             return model;
         } catch (SQLException e) {

@@ -11,6 +11,11 @@ public interface ViewTerminalCRUD<ClassModel> extends BasicsTerminalView {
     };
 
     default void showAll(List<ClassModel> l) {
+        if(l.isEmpty()){
+            System.out.println("Nenhum registro salvo!");
+            return;
+        }
+
         System.out.println("\nTotal: " + l.size());
         System.out.println("----------------------------");
         l.forEach(System.out::println);

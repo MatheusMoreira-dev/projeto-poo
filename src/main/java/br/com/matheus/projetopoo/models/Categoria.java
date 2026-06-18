@@ -1,5 +1,8 @@
 package br.com.matheus.projetopoo.models;
 
+import javax.swing.text.html.Option;
+import java.util.Optional;
+
 public enum Categoria {
     PAPELARIA(1, "Papelaria"),
     ELETRONICO(2, "Eletrônico"),
@@ -24,8 +27,21 @@ public enum Categoria {
         return nome;
     }
 
+    public static Categoria getByCod(int cod) throws IllegalArgumentException{
+        for (Categoria c : Categoria.values()){
+            if(c.getCodigo() == cod){
+                return c;
+            }
+        }
+
+        return null;
+    }
+
     @Override
     public String toString() {
-        return nome;
+        return "Categoria{" +
+                "codigo=" + codigo +
+                ", nome='" + nome + '\'' +
+                '}';
     }
 }

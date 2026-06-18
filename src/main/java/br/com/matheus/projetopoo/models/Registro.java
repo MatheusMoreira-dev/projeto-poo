@@ -61,4 +61,16 @@ public class Registro {
     public void setDescricao(String descricao) {
         this.descricao = descricao;
     }
+
+    @Override
+    public String toString() {
+        return "Registro{" +
+                "data=" + data +
+                ", itemId=" + itemId +
+                ", funcionarioId=" + funcionarioId +
+                ", depositoId=" + depositoId +
+                ", quantidade=" + quantidade +
+                ", descricao='" + descricao + '\'' +
+                '}';
+    }
 }
