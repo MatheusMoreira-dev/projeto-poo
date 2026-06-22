@@ -2,7 +2,7 @@ package br.com.matheus.projetopoo.models;
 
 import java.time.LocalDate;
 
-public class Registro {
+public class Registro extends Model {
     private LocalDate data;
     private int itemId;
     private int funcionarioId;
@@ -16,10 +16,6 @@ public class Registro {
 
     public void setData(LocalDate data) {
         this.data = data;
-    }
-
-    public void setData(String dataString){
-        this.data = LocalDate.parse(dataString);
     }
 
     public int getItemId() {
@@ -64,13 +60,13 @@ public class Registro {
 
     @Override
     public String toString() {
-        return "Registro{" +
-                "data=" + data +
-                ", itemId=" + itemId +
-                ", funcionarioId=" + funcionarioId +
-                ", depositoId=" + depositoId +
-                ", quantidade=" + quantidade +
-                ", descricao='" + descricao + '\'' +
+        return "id: " + getId() +
+                " | data: " + data +
+                " | itemId:" + itemId +
+                " | funcionarioId : " + funcionarioId +
+                " | depositoId: " + depositoId +
+                "\nquantidade: " + quantidade +
+                "\ndescricao: \n" + descricao + '\'' +
                 '}';
     }
 }

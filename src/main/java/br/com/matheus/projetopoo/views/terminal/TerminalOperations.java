@@ -2,7 +2,7 @@ package br.com.matheus.projetopoo.views.terminal;
 
 import java.util.Scanner;
 
-public interface BasicsTerminalView {
+public interface TerminalOperations {
     Scanner input = new Scanner(System.in);
 
     default void successMsg(String title){
@@ -51,4 +51,13 @@ public interface BasicsTerminalView {
 
         return opt == 0;
     }
+
+    default void clearConsole(){
+        System.out.print("\033[H\033[2J");
+        System.out.flush();
+    }
+
+    default void exit(){
+        System.out.println("Saindo...");
+    };
 }

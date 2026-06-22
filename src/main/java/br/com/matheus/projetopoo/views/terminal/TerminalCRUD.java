@@ -1,16 +1,18 @@
 package br.com.matheus.projetopoo.views.terminal;
 
 import java.util.List;
-import java.util.Scanner;
 
-public interface ViewTerminalCRUD<ClassModel> extends BasicsTerminalView {
+public interface TerminalCRUD<ClassModel> extends TerminalOperations {
     ClassModel create();
 
     default void showItem(ClassModel c){
+        clearConsole();
         System.out.println("\n" + c + "\n");
     };
 
     default void showAll(List<ClassModel> l) {
+       clearConsole();
+
         if(l.isEmpty()){
             System.out.println("Nenhum registro salvo!");
             return;
@@ -25,6 +27,8 @@ public interface ViewTerminalCRUD<ClassModel> extends BasicsTerminalView {
     ClassModel edit();
 
     default Integer requestId() {
+        clearConsole();
+
         System.out.println("Digite o ID: ");
         Integer id = input.nextInt();
         input.nextLine();
@@ -33,10 +37,7 @@ public interface ViewTerminalCRUD<ClassModel> extends BasicsTerminalView {
     };
 
     default boolean delete(ClassModel c){
+        clearConsole();
         return confirmExec("Tem certeza que deseja excluir ?", c.toString());
     }
-
-    default void exit(){
-        System.out.println("Saindo...");
-    };
 }

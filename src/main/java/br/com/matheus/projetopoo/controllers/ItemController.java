@@ -1,125 +1,181 @@
 package br.com.matheus.projetopoo.controllers;
 
-import br.com.matheus.projetopoo.DAO.DepositoDAO;
 import br.com.matheus.projetopoo.DAO.FuncionarioDAO;
 import br.com.matheus.projetopoo.DAO.ItemDAO;
+import br.com.matheus.projetopoo.models.Categoria;
 import br.com.matheus.projetopoo.models.Funcionario;
 import br.com.matheus.projetopoo.models.Item;
-import br.com.matheus.projetopoo.views.terminal.ItemViewTerminal;
+import br.com.matheus.projetopoo.views.terminal.ItemView;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 public class ItemController implements TerminalController{
-    private final ItemDAO dao = new ItemDAO();
-    private final FuncionarioDAO funcionarioDAO = new FuncionarioDAO();
-    private final ItemViewTerminal view = new ItemViewTerminal();
+    private final ItemDAO DAO = new ItemDAO();
+    private final FuncionarioDAO FUNCIONARIO_DAO = new FuncionarioDAO();
+    private final ItemView VIEW = new ItemView();
 
     @Override
     public void create() {
         try {
-            Item i = view.create();
-            Optional<Funcionario> setor = funcionarioDAO.getById(i.getFuncionarioId());
+            Item i = VIEW.create();
+            Optional<Funcionario> setor = FUNCIONARIO_DAO.getById(i.getFuncionarioId());
 
             if (setor.isEmpty()) {
-                view.errorMsg("Não existe nenhum funcionário com esse id!");
+                VIEW.errorMsg("Não existe nenhum funcionário com esse id!");
                 return;
             }
 
-            dao.insert(i);
-            view.successMsg("Item cadastrado com sucesso!");
+            DAO.insert(i);
+            VIEW.successMsg("Item cadastrado com sucesso!");
 
 
         } catch (SQLException e) {
-            view.errorMsg("Não foi possível realizar operação!");
+            VIEW.errorMsg("Não foi possível realizar operação!");
         }
     }
 
     @Override
     public void delete() {
-        Integer id = view.requestId();
+        Integer id = VIEW.requestId();
 
         try {
-            Optional<Item> s = dao.getById(id);
+            Optional<Item> s = DAO.getById(id);
 
             if (s.isEmpty()){
-                view.errorMsg("Não há nenhum item com esse id.");
+                VIEW.errorMsg("Não há nenhum item com esse id.");
                 return;
             }
 
-            boolean deleted = dao.delete(s.get().getId());
+            boolean deleted = DAO.delete(s.get().getId());
 
             if (!deleted){
-                view.successMsg("Operação cancelada!");
+                VIEW.successMsg("Operação cancelada!");
                 return;
             }
 
-            view.successMsg("Operação bem sucedida!");
+            VIEW.successMsg("Operação bem sucedida!");
 
         } catch (SQLException e) {
-            view.errorMsg("Falha na execução!");
+            VIEW.errorMsg("Falha na execução!");
         }
     }
 
     @Override
     public void edit() {
         try {
-            Item i = view.edit();
-            boolean existsItem = dao.confirmExistence(i.getId());
+            Item i = VIEW.edit();
+            boolean existsItem = DAO.confirmExistence(i.getId());
 
             if (!existsItem) {
-                view.errorMsg("Não existe nenhum item com esse Id");
+                VIEW.errorMsg("Não existe nenhum item com esse Id");
                 return;
             }
 
-            boolean existsFuncionario = funcionarioDAO.confirmExistence(i.getFuncionarioId());
+            boolean existsFuncionario = FUNCIONARIO_DAO.confirmExistence(i.getFuncionarioId());
 
             if (!existsFuncionario) {
-                view.errorMsg("Não existe nenhum funcionário com esse Id");
+                VIEW.errorMsg("Não existe nenhum funcionário com esse Id");
                 return;
             }
 
-            dao.update(i);
-            view.successMsg("Item editado com sucesso!");
+            DAO.update(i);
+            VIEW.successMsg("Item editado com sucesso!");
 
         } catch (SQLException e){
-            view.errorMsg("Não foi possível editar o Item!");
+            VIEW.errorMsg("Não foi possível editar o Item!");
         }
     }
 
     @Override
     public void get() {
-        Integer id = view.requestId();
+        Integer id = VIEW.requestId();
 
         try {
-            Optional<Item> item = dao.getById(id);
+            Optional<Item> item = DAO.getById(id);
 
             if (item.isEmpty()) {
-                view.errorMsg("Não há nenhum item com esse Id");
+                VIEW.errorMsg("Não há nenhum item com esse Id");
                 return;
             }
 
-            view.showItem(item.get());
+            VIEW.showItem(item.get());
 
         } catch (SQLException e) {
-            view.errorMsg("Não foi possível realizar operação de busca!");
+            VIEW.errorMsg("Não foi possível realizar operação de busca!");
         }
     }
 
     @Override
     public void getAll() {
         try {
-            List<Item> list = dao.getAll();
-            view.showAll(list);
+            List<Item> list = DAO.getAll();
+            VIEW.showAll(list);
 
         } catch (SQLException e) {
-            view.errorMsg("Erro ao carregar todos os itens cadastrados!");
+            VIEW.errorMsg("Erro ao carregar todos os itens cadastrados!");
+        }
+    }
+
+    public void filterByCategeoria(){
+        Categoria c = VIEW.getCategoria();
+
+        try {
+            List<Item> list = DAO.filterByCategoria(c);
+
+            if(list.isEmpty()){
+                VIEW.errorMsg("Não há nenhum item com essa categoria!");
+                return;
+            }
+
+            list.forEach(System.out::println);
+
+        } catch (SQLException e) {
+            VIEW.errorMsg("Não foi possível realizar a consulta!");
         }
     }
 
     @Override
     public void exit() {
-        view.exit();
+        VIEW.exit();
     }
+
+    @Override
+    public void startMenu(String titulo){
+        int opt = -1;
+        String menu = """
+                %s
+                ----------------------------------------------
+                1 - Criar %s
+                2 - Mostrar %s
+                3 - Motrar todos
+                4 - Editar %s
+                5 - Deletar %s
+                6 - Filtrar por categoria
+                
+                0 - Voltar
+                -------------------------------------------
+                
+                Opção:
+                """.formatted(titulo, titulo, titulo, titulo, titulo);
+
+        while (opt != 0) {
+            System.out.print(menu);
+            opt = input.nextInt();
+
+            switch (opt) {
+                case 1: create(); break;
+                case 2: get(); break;
+                case 3: getAll(); break;
+                case 4: edit(); break;
+                case 5: delete(); break;
+                case 6: filterByCategeoria();
+                case 0: exit(); break;
+
+                default:
+                    System.out.println("\nDigite uma opção válida !\n");
+            }
+        }
+    };
 }

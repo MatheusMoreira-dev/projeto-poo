@@ -2,101 +2,101 @@ package br.com.matheus.projetopoo.controllers;
 
 import br.com.matheus.projetopoo.DAO.SetorDAO;
 import br.com.matheus.projetopoo.models.Setor;
-import br.com.matheus.projetopoo.views.terminal.SetorViewTerminal;
+import br.com.matheus.projetopoo.views.terminal.SetorView;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 public class SetorController implements TerminalController {
-    private final SetorDAO dao = new SetorDAO();
-    private final SetorViewTerminal view = new SetorViewTerminal();
+    private final SetorDAO DAO = new SetorDAO();
+    private final SetorView VIEW = new SetorView();
 
     public void create(){
-        Setor s = view.create();
+        Setor s = VIEW.create();
 
         try {
-            Integer id = dao.insert(s);
-            view.successMsg("Setor criado com sucesso");
+            Integer id = DAO.insert(s);
+            VIEW.successMsg("Setor criado com sucesso");
 
         } catch (SQLException e){
-            view.errorMsg("Falha em criar setor!");
+            VIEW.errorMsg("Falha em criar setor!");
         }
     }
 
     public void delete(){
-        Integer id = view.requestId();
+        Integer id = VIEW.requestId();
 
         try {
-            Optional<Setor> s = dao.getById(id);
+            Optional<Setor> s = DAO.getById(id);
 
             if (s.isEmpty()){
-                view.errorMsg("Não há nenhum setor com esse id.");
+                VIEW.errorMsg("Não há nenhum setor com esse id.");
                 return;
             }
 
-            boolean deleted = dao.delete(s.get().getId());
+            boolean deleted = DAO.delete(s.get().getId());
 
             if (!deleted){
-                view.successMsg("Operação cancelada!");
+                VIEW.successMsg("Operação cancelada!");
                 return;
             }
 
-            view.successMsg("Operação bem sucedida!");
+            VIEW.successMsg("Operação bem sucedida!");
 
         } catch (SQLException e) {
-            view.errorMsg("Não foi possível localizar o setor!");
+            VIEW.errorMsg("Não foi possível localizar o setor!");
         }
     }
 
     public void edit(){
-        Setor s = view.edit();
+        Setor s = VIEW.edit();
 
         try {
-            boolean exists = dao.confirmExistence(s.getId());
+            boolean exists = DAO.confirmExistence(s.getId());
 
             if (!exists) {
-                view.errorMsg("Não existe nenhum setor com esse Id");
+                VIEW.errorMsg("Não existe nenhum setor com esse Id");
                 return;
             }
 
-            dao.update(s);
-            view.successMsg("Setor editado com sucesso!");
+            DAO.update(s);
+            VIEW.successMsg("Setor editado com sucesso!");
 
         } catch (SQLException e){
-            view.errorMsg("Não foi possível editar o setor!");
+            VIEW.errorMsg("Não foi possível editar o setor!");
         }
     }
 
     public void getAll() {
         try {
-            List<Setor> list = dao.getAll();
-            view.showAll(list);
+            List<Setor> list = DAO.getAll();
+            VIEW.showAll(list);
 
         } catch (SQLException e) {
-            view.errorMsg("Erro ao carregar todos os setores cadastrados!");
+            VIEW.errorMsg("Erro ao carregar todos os setores cadastrados!");
         }
     }
 
     public void get(){
-        Integer id = view.requestId();
+        Integer id = VIEW.requestId();
 
         try {
-            Optional<Setor> s = dao.getById(id);
+            Optional<Setor> s = DAO.getById(id);
 
             if (s.isEmpty()) {
-                view.errorMsg("Não há nenhum setor com esse Id");
+                VIEW.errorMsg("Não há nenhum setor com esse Id");
                 return;
             }
 
-            view.showItem(s.get());
+            VIEW.showItem(s.get());
 
         } catch (SQLException e) {
-            view.errorMsg("Não foi possível realizar operação de busca!");
+            VIEW.errorMsg("Não foi possível realizar operação de busca!");
         }
     }
 
     public void exit(){
-        view.exit();
+        VIEW.exit();
     }
 }

@@ -1,7 +1,5 @@
 package br.com.matheus.projetopoo.controllers;
 
-import br.com.matheus.projetopoo.utils.TerminalUtils;
-
 import java.util.Scanner;
 
 public interface TerminalController {
@@ -19,27 +17,26 @@ public interface TerminalController {
 
     void exit();
 
-    default void startMenu(){
+    default void startMenu(String titulo){
         int opt = -1;
         String menu = """
+                %s
                 ----------------------------------------------
-                1 - Criar
-                2 - Mostrar Item
-                3 - Motrar todos os registros
-                4 - Editar
-                5 - Deletar
+                1 - Criar %s
+                2 - Mostrar %s
+                3 - Motrar todos
+                4 - Editar %s
+                5 - Deletar %s
                 
-                0 - Sair
+                0 - Voltar
                 -------------------------------------------
                 
                 Opção:
-                """;
+                """.formatted(titulo, titulo, titulo, titulo, titulo);
 
         while (opt != 0) {
             System.out.print(menu);
             opt = input.nextInt();
-
-            TerminalUtils.clearConsole();
 
             switch (opt) {
                 case 1: create(); break;

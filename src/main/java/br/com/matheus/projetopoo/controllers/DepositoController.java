@@ -2,102 +2,101 @@ package br.com.matheus.projetopoo.controllers;
 
 import br.com.matheus.projetopoo.DAO.DepositoDAO;
 import br.com.matheus.projetopoo.models.Deposito;
-import br.com.matheus.projetopoo.models.Setor;
-import br.com.matheus.projetopoo.views.terminal.DepositoViewTerminal;
+import br.com.matheus.projetopoo.views.terminal.DepositoView;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 public class DepositoController implements TerminalController{
-    private final DepositoDAO dao = new DepositoDAO();
-    private final DepositoViewTerminal view = new DepositoViewTerminal();
+    private final DepositoDAO DAO = new DepositoDAO();
+    private final DepositoView VIEW = new DepositoView();
 
     public void create(){
-        Deposito s = view.create();
+        Deposito s = VIEW.create();
 
         try {
-            Integer id = dao.insert(s);
-            view.successMsg("Depósito criado com sucesso");
+            Integer id = DAO.insert(s);
+            VIEW.successMsg("Depósito criado com sucesso");
 
         } catch (SQLException e){
-            view.errorMsg("Falha em criar depósito!");
+            VIEW.errorMsg("Falha em criar depósito!");
         }
     }
 
     public void delete(){
-        Integer id = view.requestId();
+        Integer id = VIEW.requestId();
 
         try {
-            Optional<Deposito> s = dao.getById(id);
+            Optional<Deposito> s = DAO.getById(id);
 
             if (s.isEmpty()){
-                view.errorMsg("Não há nenhum depósito com esse id.");
+                VIEW.errorMsg("Não há nenhum depósito com esse id.");
                 return;
             }
 
-            boolean deleted = dao.delete(s.get().getId());
+            boolean deleted = DAO.delete(s.get().getId());
 
             if (!deleted){
-                view.successMsg("Operação cancelada!");
+                VIEW.successMsg("Operação cancelada!");
                 return;
             }
 
-            view.successMsg("Operação bem sucedida!");
+            VIEW.successMsg("Operação bem sucedida!");
 
         } catch (SQLException e) {
-            view.errorMsg("Não foi possível localizar o depósito!");
+            VIEW.errorMsg("Não foi possível localizar o depósito!");
         }
     }
 
     public void edit(){
-        Deposito s = view.edit();
+        Deposito s = VIEW.edit();
 
         try {
-            boolean exists = dao.confirmExistence(s.getId());
+            boolean exists = DAO.confirmExistence(s.getId());
 
             if (!exists) {
-                view.errorMsg("Não existe nenhum depósito com esse Id");
+                VIEW.errorMsg("Não existe nenhum depósito com esse Id");
                 return;
             }
 
-            dao.update(s);
-            view.successMsg("Depósito editado com sucesso!");
+            DAO.update(s);
+            VIEW.successMsg("Depósito editado com sucesso!");
 
         } catch (SQLException e){
-            view.errorMsg("Não foi possível editar o depósito!");
+            VIEW.errorMsg("Não foi possível editar o depósito!");
         }
     }
 
     public void getAll() {
         try {
-            List<Deposito> list = dao.getAll();
-            view.showAll(list);
+            List<Deposito> list = DAO.getAll();
+            VIEW.showAll(list);
 
         } catch (SQLException e) {
-            view.errorMsg("Erro ao carregar todos os depósitos cadastrados!");
+            VIEW.errorMsg("Erro ao carregar todos os depósitos cadastrados!");
         }
     }
 
     public void get(){
-        Integer id = view.requestId();
+        Integer id = VIEW.requestId();
 
         try {
-            Optional<Deposito> s = dao.getById(id);
+            Optional<Deposito> s = DAO.getById(id);
 
             if (s.isEmpty()) {
-                view.errorMsg("Não há nenhum deposito com esse Id");
+                VIEW.errorMsg("Não há nenhum deposito com esse Id");
                 return;
             }
 
-            view.showItem(s.get());
+            VIEW.showItem(s.get());
 
         } catch (SQLException e) {
-            view.errorMsg("Não foi possível realizar operação de busca!");
+            VIEW.errorMsg("Não foi possível realizar operação de busca!");
         }
     }
 
     public void exit(){
-        view.exit();
+        VIEW.exit();
     }
 }

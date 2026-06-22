@@ -1,8 +1,5 @@
 package br.com.matheus.projetopoo.models;
 
-import javax.swing.text.html.Option;
-import java.util.Optional;
-
 public enum Categoria {
     PAPELARIA(1, "Papelaria"),
     ELETRONICO(2, "Eletrônico"),
@@ -39,9 +36,7 @@ public enum Categoria {
 
     @Override
     public String toString() {
-        return "Categoria{" +
-                "codigo=" + codigo +
-                ", nome='" + nome + '\'' +
-                '}';
+        return "cod: " + codigo +
+                "| nome: " + nome;
     }
 }

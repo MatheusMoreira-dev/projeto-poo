@@ -40,11 +40,6 @@ public class Item extends Model {
 
     @Override
     public String toString() {
-        return "Item{" +
-                "nome='" + nome + '\'' +
-                ", descricao='" + descricao + '\'' +
-                ", categoria=" + categoria +
-                ", funcionarioId=" + funcionarioId +
-                '}';
+        return "id: %d | nome: %s | categoria: %s | funcionario: %s \n\n descrição: \n %s".formatted(getId(), nome, categoria.getNome(), funcionarioId, descricao);
     }
 }

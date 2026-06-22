@@ -2,7 +2,7 @@ package br.com.matheus.projetopoo.views.terminal;
 
 import br.com.matheus.projetopoo.models.Deposito;
 
-public class DepositoViewTerminal implements ViewTerminalCRUD<Deposito> {
+public class DepositoView implements TerminalCRUD<Deposito> {
     @Override
     public Deposito create() {
         Deposito d = new Deposito();

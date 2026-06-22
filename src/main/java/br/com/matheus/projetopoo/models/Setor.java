@@ -9,6 +9,6 @@ public class Setor extends Model {
 
     @Override
     public String toString() {
-        return "id: %d - nome: %s".formatted(getId(), nome);
+        return "id: %d | nome: %s".formatted(getId(), nome);
     }
 }

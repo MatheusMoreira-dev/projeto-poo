@@ -52,7 +52,6 @@ public abstract class DAO<ClassModel> {
                 ){
 
             stmt.setInt(1, id);
-
             ResultSet result = stmt.executeQuery();
 
             if (result.next()) return Optional.of(deserializer(result));
@@ -75,7 +74,6 @@ public abstract class DAO<ClassModel> {
 
             if (result.next()) return true;
             result.close();
-
         }
 
         return false;
@@ -92,7 +90,6 @@ public abstract class DAO<ClassModel> {
 
                 stmt.setInt(1, id);
                 successful = stmt.executeUpdate() > 0;
-
         }
 
         return successful;

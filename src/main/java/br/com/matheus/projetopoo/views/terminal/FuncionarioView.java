@@ -2,7 +2,7 @@ package br.com.matheus.projetopoo.views.terminal;
 
 import br.com.matheus.projetopoo.models.Funcionario;
 
-public class FuncionarioViewTerminal implements ViewTerminalCRUD<Funcionario> {
+public class FuncionarioView implements TerminalCRUD<Funcionario> {
     @Override
     public Funcionario create() {
         Funcionario f = new Funcionario();

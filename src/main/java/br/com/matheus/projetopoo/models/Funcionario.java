@@ -22,9 +22,6 @@ public class Funcionario extends Model {
 
     @Override
     public String toString() {
-        return "Funcionario{" +
-                "nome='" + nome + '\'' +
-                ", setorId=" + setorId +
-                '}';
+        return "id: %d | nome: %s | setorId: %d".formatted(getId(), nome, setorId);
     }
 }

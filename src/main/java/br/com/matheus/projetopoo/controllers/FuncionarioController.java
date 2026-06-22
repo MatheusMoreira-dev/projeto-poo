@@ -4,121 +4,122 @@ import br.com.matheus.projetopoo.DAO.FuncionarioDAO;
 import br.com.matheus.projetopoo.DAO.SetorDAO;
 import br.com.matheus.projetopoo.models.Funcionario;
 import br.com.matheus.projetopoo.models.Setor;
-import br.com.matheus.projetopoo.views.terminal.FuncionarioViewTerminal;
+import br.com.matheus.projetopoo.views.terminal.FuncionarioView;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
 public class FuncionarioController implements TerminalController{
-    private final FuncionarioDAO dao = new FuncionarioDAO();
-    private final FuncionarioViewTerminal view = new FuncionarioViewTerminal();
-    private final SetorDAO setorDAO = new SetorDAO();
+    private final FuncionarioDAO DAO = new FuncionarioDAO();
+    private final FuncionarioView VIEW = new FuncionarioView();
+    private final SetorDAO SETOR_DAO = new SetorDAO();
 
     @Override
     public void create() {
         try {
-            Funcionario f = view.create();
-            Optional<Setor> setor = setorDAO.getById(f.getSetorId());
+            Funcionario f = VIEW.create();
+            Optional<Setor> setor = SETOR_DAO.getById(f.getSetorId());
 
             if (setor.isEmpty()) {
-                view.errorMsg("Não existe nenhum setor com esse id!");
+                VIEW.errorMsg("Não existe nenhum setor com esse id!");
                 return;
             }
 
-            dao.insert(f);
-            view.successMsg("Funcionário cadastrado com sucesso!");
+            DAO.insert(f);
+            VIEW.successMsg("Funcionário cadastrado com sucesso!");
 
 
         } catch (SQLException e) {
-            view.errorMsg("Não foi possível realizar operação!");
+            VIEW.errorMsg("Não foi possível realizar operação!");
         }
     }
 
     @Override
     public void delete() {
-        Integer id = view.requestId();
+        Integer id = VIEW.requestId();
 
         try {
-            Optional<Funcionario> s = dao.getById(id);
+            Optional<Funcionario> s = DAO.getById(id);
 
             if (s.isEmpty()){
-                view.errorMsg("Não há nenhum funcionário com esse id.");
+                VIEW.errorMsg("Não há nenhum funcionário com esse id.");
                 return;
             }
 
-            boolean deleted = dao.delete(s.get().getId());
+            boolean confirmDelete = VIEW.delete(s.get());
 
-            if (!deleted){
-                view.successMsg("Operação cancelada!");
+            if (!confirmDelete){
+                VIEW.successMsg("Operação cancelada!");
                 return;
             }
 
-            view.successMsg("Operação bem sucedida!");
+            DAO.delete(s.get().getId());
+            VIEW.successMsg("Operação bem sucedida!");
 
         } catch (SQLException e) {
-            view.errorMsg("Falha na execução!");
+            VIEW.errorMsg("Falha na execução!");
         }
     }
 
     @Override
     public void edit() {
         try {
-            Funcionario f = view.edit();
-            boolean existsFuncionario = dao.confirmExistence(f.getId());
+            Funcionario f = VIEW.edit();
+            boolean existsFuncionario = DAO.confirmExistence(f.getId());
 
             if (!existsFuncionario) {
-                view.errorMsg("Não existe nenhum funcionário com esse Id");
+                VIEW.errorMsg("Não existe nenhum funcionário com esse Id");
                 return;
             }
 
-            boolean existsSetor = setorDAO.confirmExistence(f.getSetorId());
+            boolean existsSetor = SETOR_DAO.confirmExistence(f.getSetorId());
 
             if (!existsSetor) {
-                view.errorMsg("Não existe nenhum setor com esse Id");
+                VIEW.errorMsg("Não existe nenhum setor com esse Id");
                 return;
             }
 
-            dao.update(f);
-            view.successMsg("Funcionário editado com sucesso!");
+            DAO.update(f);
+            VIEW.successMsg("Funcionário editado com sucesso!");
 
         } catch (SQLException e){
-            view.errorMsg("Não foi possível editar o Funcionário!");
+            VIEW.errorMsg("Não foi possível editar o Funcionário!");
         }
     }
 
     @Override
     public void get() {
-        Integer id = view.requestId();
+        Integer id = VIEW.requestId();
 
         try {
-            Optional<Funcionario> s = dao.getById(id);
+            Optional<Funcionario> s = DAO.getById(id);
 
             if (s.isEmpty()) {
-                view.errorMsg("Não há nenhum funcionário com esse Id");
+                VIEW.errorMsg("Não há nenhum funcionário com esse Id");
                 return;
             }
 
-            view.showItem(s.get());
+            VIEW.showItem(s.get());
 
         } catch (SQLException e) {
-            view.errorMsg("Não foi possível realizar operação de busca!");
+            VIEW.errorMsg("Não foi possível realizar operação de busca!");
         }
     }
 
     @Override
     public void getAll() {
         try {
-            List<Funcionario> list = dao.getAll();
-            view.showAll(list);
+            List<Funcionario> list = DAO.getAll();
+            VIEW.showAll(list);
 
         } catch (SQLException e) {
-            view.errorMsg("Erro ao carregar todos os funcionários cadastrados!");
+            VIEW.errorMsg("Erro ao carregar todos os funcionários cadastrados!");
         }
     }
 
     @Override
     public void exit() {
-        view.exit();
+        VIEW.exit();
     }
 }

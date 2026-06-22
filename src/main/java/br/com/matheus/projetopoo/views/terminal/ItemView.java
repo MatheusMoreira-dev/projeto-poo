@@ -3,7 +3,9 @@ package br.com.matheus.projetopoo.views.terminal;
 import br.com.matheus.projetopoo.models.Categoria;
 import br.com.matheus.projetopoo.models.Item;
 
-public class ItemViewTerminal implements ViewTerminalCRUD<Item>{
+import java.util.List;
+
+public class ItemView implements TerminalCRUD<Item> {
     @Override
     public Item create() {
         Item i = new Item();
@@ -45,5 +47,22 @@ public class ItemViewTerminal implements ViewTerminalCRUD<Item>{
         item.setId(id);
 
         return item;
+    }
+
+    public Categoria getCategoria(){
+        List<Categoria> categorias = List.of(Categoria.values());
+
+        System.out.println("Selecione uma categoria: ");
+        categorias.forEach(System.out::println);
+
+        System.out.println("Cod: ");
+        int opt = input.nextInt();
+        input.nextLine();
+
+        try {
+            return categorias.get(opt - 1);
+        } catch (IllegalArgumentException e){
+            errorMsg("");
+        }
     }
 }
